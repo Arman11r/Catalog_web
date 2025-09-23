@@ -57,10 +57,60 @@ export default function PricingCalculator() {
     });
   };
 
-  const generatePDF = () => {
-    console.log('PDF generation triggered with selected features:', Array.from(selectedFeatures));
-    // Todo: Implement actual PDF generation functionality
-    alert(`PDF would be generated with ${selectedFeatures.size} add-on features. Total: ₹${totalPrice.toLocaleString('en-IN')}`);
+  const generatePDF = async () => {
+    try {
+      console.log('PDF generation triggered with selected features:', Array.from(selectedFeatures));
+      
+      const selectedFeaturesArray = Array.from(selectedFeatures);
+      
+      // First create a proposal
+      const proposalResponse = await fetch('/api/proposal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          selectedFeatures: selectedFeaturesArray
+        })
+      });
+
+      if (!proposalResponse.ok) {
+        throw new Error('Failed to create proposal');
+      }
+
+      const proposalData = await proposalResponse.json();
+
+      // Then generate PDF
+      const pdfResponse = await fetch('/api/generate-pdf', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          proposalId: proposalData.proposalId,
+          selectedFeatures: selectedFeaturesArray
+        })
+      });
+
+      if (!pdfResponse.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      // Download the PDF
+      const blob = await pdfResponse.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'MunchBox_Feature_Selection.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
   };
 
   return (
