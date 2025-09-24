@@ -19,7 +19,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
               <h3 className="text-2xl font-bold text-primary" style={{ fontFamily: 'Pacifico, cursive' }}>
-                Munch Box
+                CafeCanvas
               </h3>
             </div>
             <div className="text-center md:text-right">
@@ -27,7 +27,7 @@ export default function Home() {
                 Transform your restaurant with our digital solutions
               </p>
               <p className="text-muted-foreground text-xs mt-1">
-                © 2024 Munch Box. All rights reserved.
+                © 2024 CafeCanvas. All rights reserved.
               </p>
             </div>
           </div>

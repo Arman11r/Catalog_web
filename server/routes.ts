@@ -194,7 +194,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         </head>
         <body>
           <div class="header">
-            <h1>Munch Box</h1>
+            <h1>CafeCanvas</h1>
             <div class="tagline">Customized Digital Restaurant Experience</div>
             <div class="date">Proposal Date: ${today}</div>
           </div>
@@ -233,7 +233,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           </div>
           
           <div class="footer-note">
-            Generated PDF – Munch Box Feature Selection • This is an auto-generated summary of selected features.
+            Generated PDF – CafeCanvas Feature Selection • This is an auto-generated summary of selected features.
           </div>
         </body>
         </html>
@@ -241,7 +241,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Generate PDF using Puppeteer with proper sandbox settings
       const browser = await puppeteer.launch({
-        headless: 'new',
+        headless: true,
         args: ['--no-sandbox', '--disable-setuid-sandbox']
       });
       
@@ -265,7 +265,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Send PDF as response
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', 'attachment; filename="MunchBox_Feature_Selection.pdf"');
+      res.setHeader('Content-Disposition', 'attachment; filename="CafeCanvas_Feature_Selection.pdf"');
       res.send(pdfBuffer);
 
     } catch (error) {

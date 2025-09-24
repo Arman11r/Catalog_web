@@ -101,7 +101,7 @@ export default function PricingCalculator() {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'MunchBox_Feature_Selection.pdf';
+      a.download = 'CafeCanvas_Feature_Selection.pdf';
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

@@ -12,7 +12,7 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-primary" style={{ fontFamily: 'Pacifico, cursive' }} data-testid="text-brand-name">
-              Munch Box
+              CafeCanvas
             </h1>
           </div>
           

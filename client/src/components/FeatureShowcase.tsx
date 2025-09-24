@@ -63,7 +63,7 @@ const addOnFeatures: AddOnFeature[] = [
 
 export default function FeatureShowcase() {
   return (
-    <section id="features" className="py-20 bg-background">
+    <section id="features" className="py-20 bg-gradient-to-b from-background to-muted/30 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Base Package */}
         <div className="text-center mb-16">
