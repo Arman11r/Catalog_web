@@ -59,8 +59,8 @@ export default function HeroSection() {
 
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-white/80">
             <div className="text-center" data-testid="stat-price">
-              <div className="text-3xl font-bold text-white">₹40,000</div>
-              <div className="text-sm">Starting Price</div>
+              <div className="text-3xl font-bold text-white">Custom Build</div>
+              <div className="text-sm">For You</div>
             </div>
             <div className="text-center" data-testid="stat-features">
               <div className="text-3xl font-bold text-white">15+</div>
