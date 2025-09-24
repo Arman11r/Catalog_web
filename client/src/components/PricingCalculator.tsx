@@ -1,9 +1,8 @@
 import { useState, useMemo } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
-import { Calculator, Download } from "lucide-react"
+import { Calculator } from "lucide-react"
 
 interface AddOnFeature {
   id: string;
@@ -55,62 +54,6 @@ export default function PricingCalculator() {
       }
       return newSet;
     });
-  };
-
-  const generatePDF = async () => {
-    try {
-      console.log('PDF generation triggered with selected features:', Array.from(selectedFeatures));
-      
-      const selectedFeaturesArray = Array.from(selectedFeatures);
-      
-      // First create a proposal
-      const proposalResponse = await fetch('/api/proposal', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          selectedFeatures: selectedFeaturesArray
-        })
-      });
-
-      if (!proposalResponse.ok) {
-        throw new Error('Failed to create proposal');
-      }
-
-      const proposalData = await proposalResponse.json();
-
-      // Then generate PDF
-      const pdfResponse = await fetch('/api/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          proposalId: proposalData.proposalId,
-          selectedFeatures: selectedFeaturesArray
-        })
-      });
-
-      if (!pdfResponse.ok) {
-        throw new Error('Failed to generate PDF');
-      }
-
-      // Download the PDF
-      const blob = await pdfResponse.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'CafeCanvas_Feature_Selection.pdf';
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-    } catch (error) {
-      console.error('PDF generation error:', error);
-      alert('Failed to generate PDF. Please try again.');
-    }
   };
 
   return (
@@ -213,17 +156,8 @@ export default function PricingCalculator() {
                   </div>
                 </div>
 
-                <Button 
-                  className="w-full" 
-                  onClick={generatePDF}
-                  data-testid="button-generate-pdf"
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  Generate Proposal PDF
-                </Button>
-
                 <div className="text-xs text-muted-foreground text-center">
-                  Includes installation, training, and 1-year support
+                  Adjust features to see your real-time price.
                 </div>
               </CardContent>
             </Card>
