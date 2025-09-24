@@ -5,7 +5,6 @@
   "outputDirectory": "dist/public",
   "functions": {
     "api/index.ts": {
-      "runtime": "nodejs20.x",
       "memory": 1536,
       "maxDuration": 60,
       "includeFiles": "dist/public/**"
