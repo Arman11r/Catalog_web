@@ -3,13 +3,6 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "outputDirectory": "dist/public",
-  "functions": {
-    "api/index.ts": {
-      "memory": 1536,
-      "maxDuration": 60,
-      "includeFiles": "dist/public/**"
-    }
-  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.ts" }
   ]
