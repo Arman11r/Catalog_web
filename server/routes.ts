@@ -1,10 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactInquirySchema, insertProposalSchema } from "@shared/schema";
+import { insertContactInquirySchema, insertProposalSchema } from "../shared/schema";
 import { ZodError } from "zod";
 import { z } from "zod";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
 const featurePrices: Record<string, number> = {
   "live-status": 3000,
@@ -239,14 +240,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         </html>
       `;
 
-      // Generate PDF using Puppeteer with proper sandbox settings
+      // Generate PDF using puppeteer-core & @sparticuz/chromium (Vercel-compatible)
+      const isVercel = !!process.env.VERCEL;
+      let executablePath = await chromium.executablePath();
+      if (!executablePath) {
+        executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || (process.platform === 'darwin'
+          ? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+          : process.platform === 'win32'
+            ? 'C://Program Files//Google//Chrome//Application//chrome.exe'
+            : '/usr/bin/google-chrome');
+      }
+
       const browser = await puppeteer.launch({
+        args: isVercel ? chromium.args : ['--no-sandbox', '--disable-setuid-sandbox'],
+        defaultViewport: isVercel ? chromium.defaultViewport : null,
+        executablePath,
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
       });
       
       const page = await browser.newPage();
-      await page.setContent(htmlContent);
+      await page.setContent(htmlContent, { waitUntil: 'networkidle0' });
       
       const pdfBuffer = await page.pdf({
         format: 'A4',

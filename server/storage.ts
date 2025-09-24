@@ -8,7 +8,7 @@ import {
   type InsertContactInquiry,
   type Proposal,
   type InsertProposal
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
@@ -43,7 +43,7 @@ export class DatabaseStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const [user] = await db
       .insert(users)
-      .values(insertUser)
+      .values(insertUser as any)
       .returning();
     return user;
   }
@@ -51,7 +51,7 @@ export class DatabaseStorage implements IStorage {
   async createContactInquiry(inquiry: InsertContactInquiry): Promise<ContactInquiry> {
     const [contactInquiry] = await db
       .insert(contactInquiries)
-      .values(inquiry)
+      .values(inquiry as any)
       .returning();
     return contactInquiry;
   }
@@ -62,9 +62,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createProposal(proposal: InsertProposal): Promise<Proposal> {
+    const normalized: InsertProposal = {
+      ...proposal,
+      // Drizzle insert type expects string[]; ensure cast
+      selectedFeatures: Array.isArray((proposal as any).selectedFeatures)
+        ? ((proposal as any).selectedFeatures as string[])
+        : [],
+      // Ensure nullable field is defined
+      contactInquiryId: (proposal as any).contactInquiryId ?? null,
+      basePrice: (proposal as any).basePrice ?? 40000,
+    } as InsertProposal;
+
     const [createdProposal] = await db
       .insert(proposals)
-      .values(proposal)
+      .values(normalized as any)
       .returning();
     return createdProposal;
   }
@@ -77,7 +88,7 @@ export class DatabaseStorage implements IStorage {
   async updateProposal(id: string, updates: Partial<Proposal>): Promise<Proposal | undefined> {
     const [updatedProposal] = await db
       .update(proposals)
-      .set(updates)
+      .set(updates as any)
       .where(eq(proposals.id, id))
       .returning();
     return updatedProposal || undefined;
@@ -136,10 +147,12 @@ export class MemStorage implements IStorage {
     const id = randomUUID();
     const createdProposal: Proposal = {
       id,
-      contactInquiryId: proposal.contactInquiryId,
-      selectedFeatures: Array.isArray(proposal.selectedFeatures) ? proposal.selectedFeatures : [],
-      totalPrice: proposal.totalPrice,
-      basePrice: proposal.basePrice || 40000,
+      contactInquiryId: (proposal as any).contactInquiryId ?? null,
+      selectedFeatures: Array.isArray((proposal as any).selectedFeatures)
+        ? (((proposal as any).selectedFeatures as string[]))
+        : [],
+      totalPrice: (proposal as any).totalPrice,
+      basePrice: (proposal as any).basePrice ?? 40000,
       createdAt: new Date(),
       pdfGenerated: false
     };

@@ -37,6 +37,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Local dev/production server only. On Vercel, the entry is api/index.ts
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
