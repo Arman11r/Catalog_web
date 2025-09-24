@@ -8,10 +8,7 @@
       "runtime": "nodejs20.x",
       "memory": 1536,
       "maxDuration": 60,
-      "includeFiles": "dist/public/**",
-      "environment": {
-        "PUPPETEER_CACHE_DIR": ".vercel/cache/puppeteer"
-      }
+      "includeFiles": "dist/public/**"
     }
   },
   "rewrites": [
