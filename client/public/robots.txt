@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cafecanvas.vercel.app/sitemap.xml
