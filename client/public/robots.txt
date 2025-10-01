@@ -6,13 +6,7 @@ Allow: /
 # Main sitemap
 Sitemap: https://cafecanvas.vercel.app/sitemap.xml
 
-# Disallow admin areas
-Disallow: /admin/
-Disallow: /admin-panel/
-Disallow: /dashboard/
-
 # Disallow development areas
-Disallow: /dev/
 Disallow: /api/
 
 # Crawl delay suggestion
